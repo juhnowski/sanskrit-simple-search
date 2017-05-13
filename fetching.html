@@ -43,6 +43,10 @@ class Word {
 
     var e = elements.item(2);
     this.article = e.innerHTML;
+    var pl = this.article.split("]");
+
+    this.L =  pl[0].substr(68);
+    console.log("L="+this.L);
     this.lines = this.article.split('<br/>');
   }
 
