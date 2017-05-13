@@ -46,7 +46,7 @@ class Word {
     var pl = this.article.split("]");
 
     this.L =  pl[0].substr(68);
-    console.log("L="+this.L);
+    //console.log("L="+this.L);
     this.lines = this.article.split('<br/>');
   }
 
@@ -61,6 +61,7 @@ class Word {
 */
     class DataModel {
       constructor(initialData) {
+
         this.url = initialData.url;
         this.key = initialData.key;
         this.filter = initialData.filter;
@@ -105,13 +106,21 @@ class Word {
                     if (this.wordslist==null){
                       this.wordslist = [];
                     }
-                    this.wordslist.push(w);
+
+
                     if (w.name.includes("not found: ")){
                         console.log("null");
                     } else {
-                        w.write();
-                    }
 
+                      var Lindx = w.L;
+                      if (llist.indexOf(Lindx)!=-1) {
+                        console.log("word repeated");
+                      } else {
+                        llist.push(Lindx);
+                        console.log("w.name=" + w.name + " w.L=" + Lindx + " llist="+llist.toString());
+                        w.write();
+                      }
+                    }
                 } else {
                   console.log("null");
                 }
@@ -232,11 +241,12 @@ function getVariants(word){
 
     </script>
     <script>
+    var llist = [];
     function test(find_word) {
        document.body.innerHTML = '';
       document.write('<p>Please type text and press Enter:</p><br> \
   	   <input type="text" size="40" onchange="test(this.value)">');
-    var res = getVariants(find_word);
+    var res = getVariants(find_word, llist);
 
     res.forEach(function(w) {
       /**
@@ -248,6 +258,7 @@ function getVariants(word){
           test.filter = "roman";
           test.noLit = "off";
           test.transLit="slp1";
+
       let dm = new DataModel(test);
       console.log("w=" + w);
         dm.setKey(w);
