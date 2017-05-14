@@ -3,14 +3,14 @@
 - add server.js - this is node.js simple http server for testing. LocalStorage is working only with domains.When I opened fetching.html as file, localStorage was inaccessible.
 
 - run local http server:
--- install node.js https://nodejs.org/en/
--- install http-server https://www.npmjs.com/package/http-server via npm:   npm install http-server -g
--- run server: node server.js
--- test url in CHROME: http://localhost:8080/fetching.html and don't forget switch on CORS plugin
+ - install node.js https://nodejs.org/en/
+ - install http-server https://www.npmjs.com/package/http-server via npm:   npm install http-server -g
+ - run server: node server.js
+ - test url in CHROME: http://localhost:8080/fetching.html and don't forget switch on CORS plugin
 
 - TODO:
--- word list ordering by desc word.frequency. Now it's display in parentheses before word name.
--- changes  test.filter = "roman";  test.noLit = "off";  test.transLit="slp1"; which are now hardcoded.
+ - word list ordering by desc word.frequency. Now it's display in parentheses before word name.
+ - changes  test.filter = "roman";  test.noLit = "off";  test.transLit="slp1"; which are now hardcoded.
 
 # 13-05-2017
 Add fetching.html - yet another iteration of search UI component
