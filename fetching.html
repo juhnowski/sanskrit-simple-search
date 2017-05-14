@@ -30,7 +30,8 @@ class Word {
   constructor(html) {
     this.html = html;
     this.parse();
-
+    this.frequency = localStorage.getItem(this.name);
+    console.log("this.name=|"+this.name+"|");
   }
 
   parse() {
@@ -39,7 +40,7 @@ class Word {
     var fragment = range.createContextualFragment(this.html);
     var elements = fragment.children;
 
-    this.name = elements.item(1).innerHTML;
+    this.name = elements.item(1).innerHTML.substr(6);
 
     var e = elements.item(2);
     this.article = e.innerHTML;
@@ -51,7 +52,7 @@ class Word {
   }
 
   write() {
-    document.write("<h1>"+this.name+"</h1><br>" + this.article+"<br>");
+    document.write("<h1>("+this.frequency+") "+this.name+"</h1><br>" + this.article+"<br>");
   }
 
 }
@@ -240,10 +241,63 @@ function getVariants(word){
 
 
     </script>
+
+    <script>
+        //word_frequency.js is loaded when it's data absence in browser's localStorage
+        //TODO: uncleare how to check actual version without loading js file
+        class WordFrequencyManager {
+
+          checkVersion() {
+            var localValue = localStorage.getItem('FreqWordList.version');
+            var value = parseInt(localValue, 10);
+
+          // Uncomment following for manual update
+          // this.loadScript("word_frequency.js", this.execute);
+
+            if (value > 0) {
+              console.log("WordFrequencyManager:checkVersion - current version=" + value);
+            } else {
+              console.log("WordFrequencyManager:checkVersion - FreqWordList.version not found in localStorage");
+              this.loadScript("word_frequency.js", this.execute);
+            }
+          }
+
+          loadScript(url, callback) {
+            // Adding the script tag to the head as suggested before
+            var head = document.getElementsByTagName('head')[0];
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = url;
+
+            // Then bind the event to the callback function.
+            // There are several events for cross browser compatibility.
+            script.onreadystatechange = callback;
+            script.onload = callback;
+
+            // Fire the loading
+            head.appendChild(script);
+          }
+
+          execute() {
+            console.log("WordFrequencyManager:execute - word_frequency.js has been loaded");
+            let fwl = new FreqWordList();
+            localStorage.setItem('FreqWordList.version', fwl.version);
+            console.log("WordFrequencyManager:execute - update version " + fwl.version);
+            console.log("WordFrequencyManager:execute - start fill() ");
+            fwl.fill();
+            console.log("WordFrequencyManager:execute - finish fill() ");
+          }
+        }
+
+        let wfm = new WordFrequencyManager();
+        wfm.checkVersion();
+    </script>
+
     <script>
     var llist = [];
     function test(find_word) {
-       document.body.innerHTML = '';
+      llist = [];
+      document.body.innerHTML = '';
       document.write('<p>Please type text and press Enter:</p><br> \
   	   <input type="text" size="40" onchange="test(this.value)">');
     var res = getVariants(find_word, llist);
