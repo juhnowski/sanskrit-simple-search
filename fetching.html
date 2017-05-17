@@ -37,6 +37,10 @@ class Word {
     console.log("this.name=|"+this.name+"|");
   }
 
+  toString() {
+      return "("+this.frequency+")"+this.name;
+  }
+
   parse() {
     var range = document.createRange();
     range.selectNode(document.body); // required in Safari
@@ -56,6 +60,7 @@ class Word {
 
   write() {
 //    document.write("<h1>("+this.frequency+") "+this.name+"</h1><br>" + this.article+"<br>");
+    console.log("---------->" + this.name);
     llist.push(this);
     if (--handleCount>0) {
       console.log("handleCount="+handleCount);
@@ -67,6 +72,41 @@ class Word {
 }
 
 function onGetDataTimeout() {
+  if (handleCount == -2) {
+    return;
+  }
+
+  if (handleCount == -1) {
+    /*
+    console.log("Before sort:"+llist.toString());
+    console.log("After sort:"+llist.toString());
+    console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+    */
+    llist.sort(function(a,b){
+      var res;
+      if (a.frequency >= 0){
+          res = a.frequency - b.frequency;
+      } else {
+        if (b.frequency < 0) {
+          res =b.frequency - a.frequency;
+        } else {
+          res = -1;
+        }
+      }
+      return 0-res;
+    }).forEach(function(w) {
+      if ((w.name != null) && (w.name.indexOf("und:")==-1 )){
+        document.write("<h1>"+w.name+"</h1><br>" + w.article+"<br>");
+        console.log("<h1>"+w.name+"</h1><br>" + w.article+"<br>");
+      }
+
+    });
+    console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+    console.log("handleCount = -2;");
+    handleCount = -2;
+    console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+    return;
+  }
 
   if (handleCount >0) {
     if (repeatCnt<3) {
@@ -74,14 +114,13 @@ function onGetDataTimeout() {
       repeatCnt++;
       return;
     } else {
-        document.write("List not full. Fetch data error. Please try agayn.<br>");
+      if (errlist.length>0){
+        document.write("<br><b>List not full. Fetch data errors:<br>"+errlist.toString()+"</b><br>");
+      }
+        handleCount = -1;
     }
   }
 
-  llist.sort();
-  llist.forEach(function(w) {
-    document.write("<h1>"+w.name+"</h1><br>" + this.article+"<br>");
-  }
 }
 
 /**
@@ -121,17 +160,21 @@ function onGetDataTimeout() {
 
       getData() {
         this.isGetDataProcessing = true;
+        if (this.noLit==null){
+          this.noLit = localStorage.getItem('settings.noLit');
+        }
         var dataurl = this.url + "?key="+this.key+"&filter="+this.filter+"&noLit="+this.noLit+"&transLit=" + this.transLit;
         handleCount++;
           $.ajax({
             url: dataurl,
             cache: false,
             method: "GET",
+            wkey:this.key,
           })
             .done(function( html ) {
                 this.isGetDataProcessing = false;
                 let w = new Word(html);
-                if (w != null){
+                if (w.name != ""){
                     if (this.wordslist==null){
                       this.wordslist = [];
                     }
@@ -153,6 +196,9 @@ function onGetDataTimeout() {
                 } else {
                   console.log("null");
                 }
+            })
+            .fail(function( jqXHR, textStatus, errorThrown){
+              errlist.push(dataurl + " " +textStatus.toString()+" "+errorThrown.toString()+"<br>");
             });
       }
     }
@@ -323,18 +369,27 @@ function getVariants(word){
 
     <script>
     var llist = [];
+    var errlist = [];
     var handleCount = 0;
     var repeatCnt = 0;
     llist.sort(function(a,b){
-      var res = a.frequency - b.frequency;
-      if ((a.frequency <0) && (b.frequency < 0)) {
-        res = 0-res;
+      var res;
+      if (a.frequency >= 0){
+          res = a.frequency - b.frequency;
+      } else {
+        if (b.frequency < 0) {
+          res = 0-res;
+        } else {
+          res = -1;
+        }
       }
+
       return res;
     });
 
     function test(find_word) {
       llist = [];
+      errlist = [];
       handleCount = 0;
       repeatCnt = 0;
 
@@ -354,7 +409,7 @@ function getVariants(word){
           //test.noLit = "off";
           //test.transLit="slp1";
 
-          test.url = localStorage.getItem('settings.noLit');
+          this.noLit = localStorage.getItem('settings.noLit');
           test.transLit = localStorage.getItem('settings.transLit');
           test.filter = localStorage.getItem('settings.filter');
           test.url = localStorage.getItem('settings.url');
