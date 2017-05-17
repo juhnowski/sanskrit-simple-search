@@ -31,6 +31,9 @@ class Word {
     this.html = html;
     this.parse();
     this.frequency = localStorage.getItem(this.name);
+    if (this.frequency == null) {
+      this.frequency = 0 - this.name.length;
+    }
     console.log("this.name=|"+this.name+"|");
   }
 
