@@ -77,11 +77,8 @@ function onGetDataTimeout() {
   }
 
   if (handleCount == -1) {
-    /*
-    console.log("Before sort:"+llist.toString());
-    console.log("After sort:"+llist.toString());
-    console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-    */
+    document.body.innerHTML = '';
+    document.write('<input type="text" size="40" onchange="test(this.value)"><a href="#" onclick="openInNewTab(\'settings.html\');">Settings>></a>');
     llist.sort(function(a,b){
       var res;
       if (a.frequency >= 0){
@@ -393,9 +390,8 @@ function getVariants(word){
       handleCount = 0;
       repeatCnt = 0;
 
-      document.body.innerHTML = '';
-      document.write('<p>Please type text and press Enter:</p><br> \
-  	   <input type="text" size="40" onchange="test(this.value)">');
+      document.body.innerHTML = 'Loading...';
+
     var res = getVariants(find_word, llist);
 
     res.forEach(function(w) {
@@ -420,7 +416,14 @@ function getVariants(word){
     });
     }
     </script>
+
+    <script type="text/javascript">
+    function openInNewTab(url) {
+      var win = window.open(url, '_blank');
+      win.focus();
+    }
+    </script>
 	   <input type="text" size="40" onchange="test(this.value)">
-     <a href="settings.html">Settings>></a>
+     <a href="#" onclick="openInNewTab('settings.html');">Settings>></a>
   </body>
 </html>

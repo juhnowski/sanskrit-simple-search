@@ -1,9 +1,19 @@
+# 18-05-2017
+* Add sorting of output.
+* Problems:
+  * sometimes server block the request and incoming responses has 403 Forbidden Error. I think that this is a ddos protection of cologne http://www.sanskrit-lexicon.uni-koeln.de host server.
+  * if you try test it on localhost please remember, that for correct work chrome plugin can be switched on, but for correct work others internet resources (youtube for instance) it can be switched off.    
+* TODO:
+  * manual test, or it will be batter write auto tests.
+  * bug fixing
+
+
 # 17-05-2017
 * The settings.html page has been added. All properties now are stored in localStorage. It means that we may change it in one place and it will affect in all anothers one.
 * Bugfix word.frequency null value. If the word is absence on the frequency table, then word value is set to null. But in this case we may order by length.
 * TODO:
   * word list ordering by desc word.frequency. Now it's display in parentheses before word name.
-  
+
 # 14-05-2017
 * Store word frequency usage to localStorage. It was implemented by word_frequency.js which is converted from text data file by java program. Once it prepared it may be used till time when frequency data will be changed. Java converter is in https://github.com/juhnowski/FreqWordList url.
 * add server.js - this is node.js simple http server for testing. LocalStorage is working only with domains.When I opened fetching.html as file, localStorage was inaccessible.
