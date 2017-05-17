@@ -5,25 +5,6 @@
     <title>Settings</title>
   </head>
   <body>
-    <select id="filter" onchange="filterOnChange(this.value)">
-      <option value="deva">Devanagari Unicode</option>
-      <option value="hk">Kyoto-Harvard</option>
-      <option value="slp1">SLP1</option>
-      <option value="itrans">ITRANS</option>
-      <option value="roman">Roman Unicode</option>
-    </select>
-
-    <select id="transLit" onchange="translitOnChange(this.value)">
-      <option value="hk">Kyoto-Harvard</option>
-      <option value="slp1">SLP1</option>
-      <option value="itrans">ITRANS</option>
-    </select>
-
-    <select id="noLit" onchange="noLitOnChange(this.value)">
-      <option value="on">on</option>
-      <option value="off">off</option>
-    </select>
-
     <select id="url" onchange="urlOnChange(this.value)">
       <!-- Sanskrit-English Dictionaries -->
       <option value="http://www.sanskrit-lexicon.uni-koeln.de/scans/WILScan/2014/web/webtc/getword.php">Wilson Sanskrit-English Dictionary</option>
@@ -66,6 +47,27 @@
       <option value="http://www.sanskrit-lexicon.uni-koeln.de/scans/PGNScan/2014/web/webtc/getword.php">Personal and Geographical Names in the Gupta Inscriptions</option>
       <option value="http://www.sanskrit-lexicon.uni-koeln.de/scans/MCIScan/2014/web/webtc/getword.php">Mehendale Mahabharata Cultural Index</option>
     </select>
+    :
+    <select id="transLit" onchange="translitOnChange(this.value)">
+      <option value="hk">Kyoto-Harvard</option>
+      <option value="slp1">SLP1</option>
+      <option value="itrans">ITRANS</option>
+    </select>
+    >
+    <select id="filter" onchange="filterOnChange(this.value)">
+      <option value="deva">Devanagari Unicode</option>
+      <option value="hk">Kyoto-Harvard</option>
+      <option value="slp1">SLP1</option>
+      <option value="itrans">ITRANS</option>
+      <option value="roman">Roman Unicode</option>
+    </select>
+, Lit:
+    <select id="noLit" onchange="noLitOnChange(this.value)">
+      <option value="on">on</option>
+      <option value="off">off</option>
+    </select>
+
+
 
     <script type="text/javascript">
       function urlOnChange(value) {
