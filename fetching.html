@@ -55,9 +55,33 @@ class Word {
   }
 
   write() {
-    document.write("<h1>("+this.frequency+") "+this.name+"</h1><br>" + this.article+"<br>");
+//    document.write("<h1>("+this.frequency+") "+this.name+"</h1><br>" + this.article+"<br>");
+    llist.push(this);
+    if (--handleCount>0) {
+      console.log("handleCount="+handleCount);
+      setTimeout(onGetDataTimeout, 1000);
+    }
+
   }
 
+}
+
+function onGetDataTimeout() {
+
+  if (handleCount >0) {
+    if (repeatCnt<3) {
+      setTimeout(onGetDataTimeout, 1000);
+      repeatCnt++;
+      return;
+    } else {
+        document.write("List not full. Fetch data error. Please try agayn.<br>");
+    }
+  }
+
+  llist.sort();
+  llist.forEach(function(w) {
+    document.write("<h1>"+w.name+"</h1><br>" + this.article+"<br>");
+  }
 }
 
 /**
@@ -98,6 +122,7 @@ class Word {
       getData() {
         this.isGetDataProcessing = true;
         var dataurl = this.url + "?key="+this.key+"&filter="+this.filter+"&noLit="+this.noLit+"&transLit=" + this.transLit;
+        handleCount++;
           $.ajax({
             url: dataurl,
             cache: false,
@@ -298,8 +323,21 @@ function getVariants(word){
 
     <script>
     var llist = [];
+    var handleCount = 0;
+    var repeatCnt = 0;
+    llist.sort(function(a,b){
+      var res = a.frequency - b.frequency;
+      if ((a.frequency <0) && (b.frequency < 0)) {
+        res = 0-res;
+      }
+      return res;
+    });
+
     function test(find_word) {
       llist = [];
+      handleCount = 0;
+      repeatCnt = 0;
+
       document.body.innerHTML = '';
       document.write('<p>Please type text and press Enter:</p><br> \
   	   <input type="text" size="40" onchange="test(this.value)">');
@@ -327,7 +365,7 @@ function getVariants(word){
     });
     }
     </script>
-    <p>Please type text and press Enter:</p><br>
 	   <input type="text" size="40" onchange="test(this.value)">
+     <a href="settings.html">Settings>></a>
   </body>
 </html>
