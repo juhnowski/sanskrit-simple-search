@@ -307,11 +307,16 @@ function getVariants(word){
       Test data
       */
           var test ={}
-          test.url = "http://www.sanskrit-lexicon.uni-koeln.de/scans/WILScan/2014/web/webtc/getword.php";
+          //test.url = "http://www.sanskrit-lexicon.uni-koeln.de/scans/WILScan/2014/web/webtc/getword.php";
           test.key = "om";
-          test.filter = "roman";
-          test.noLit = "off";
-          test.transLit="slp1";
+          //test.filter = "roman";
+          //test.noLit = "off";
+          //test.transLit="slp1";
+
+          test.url = localStorage.getItem('settings.noLit');
+          test.transLit = localStorage.getItem('settings.transLit');
+          test.filter = localStorage.getItem('settings.filter');
+          test.url = localStorage.getItem('settings.url');
 
       let dm = new DataModel(test);
       console.log("w=" + w);
